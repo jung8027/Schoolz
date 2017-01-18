@@ -1,19 +1,19 @@
 process.env.NODE_ENV = 'test';
 
-let models = require('../models')
+let models = require('../back/models')
 let School = models.School;
 let Student = models.Student;
 
 //Require the dev-dependencies
 let chai = require('chai');
 let chaiHttp = require('chai-http');
-let server = require('../server.js');
+let server = require('../back/server.js');
 let should = chai.should();
 
 //write a function to seed your database before every test inside of the seed folder
 //your seed function should create 4 schools
 //your seed function should create 2 students that attend the first school
-let seedFunction = require('../seed')
+let seedFunction = require('../back/seed')
 
 
 chai.use(chaiHttp);
@@ -25,8 +25,8 @@ describe('Education', () => {
         done();
       })
     });
-/*
-  * Test the /GET route
+  /*
+  Test the /GET route
   */
   describe('/GET schools', () => {
       it('it should GET all the schools', (done) => {
@@ -43,7 +43,11 @@ describe('Education', () => {
 
   describe('/POST school', () => {
       it('it should POST a school ', (done) => {
-        let school = schools[1]
+        let school = {
+          name: 'Hunter',
+          district: 'Manhatten',
+          size: 1000
+        };
         chai.request(server)
             .post('/api/schools')
             .send(school)
@@ -61,7 +65,12 @@ describe('Education', () => {
 
   describe('/POST student', () => {
       it('it should POST a student ', (done) => {
-        let student = students[0]
+        let student = {
+          name: 'Parth',
+          age: '28',
+          grade: 'A',
+          SchoolId: '2'
+        };
         chai.request(server)
             .post('/api/student')
             .send(student)
